@@ -1,0 +1,329 @@
+% VİZE RAPOR ŞABLONU – Türk Masalları Derlemesi Web Sayfası
+% --------------------------------------------------------------------
+% DERLEME: Overleaf'te Menu > Compiler > XeLaTeX (pdfLaTeX de çalışır).
+% ====================================================================
+\documentclass[12pt,a4paper]{article}
+
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else
+  \usepackage{fontspec}
+\fi
+\usepackage[turkish]{babel}
+\usepackage[margin=2.4cm]{geometry}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{colortbl}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage{amssymb}
+\usepackage{caption}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\setlist{itemsep=2pt, topsep=4pt}
+\hypersetup{colorlinks=true, linkcolor=blue!50!black, urlcolor=blue!50!black}
+
+\definecolor{ana}{HTML}{14325C}
+\definecolor{acik}{HTML}{EEF2F8}
+
+\lstset{basicstyle=\ttfamily\small, backgroundcolor=\color{acik},
+  frame=single, rulecolor=\color{ana}, breaklines=true,
+  columns=fullflexible, keepspaces=true, showstringspaces=false}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{Anadolu'dan Masal Sandığı}
+\fancyhead[R]{Vize Raporu}
+\fancyfoot[C]{\thepage}
+
+\newcommand{\aciklama}[1]{{\color{gray}\itshape (#1)}}
+
+\newcommand{\haftagorsel}[1]{%
+  \IfFileExists{#1}{%
+    \includegraphics[width=\linewidth,height=7cm,keepaspectratio]{#1}%
+  }{%
+    \fbox{\parbox[c][2.6cm][c]{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}{%
+      \centering\small\color{gray} Görsel ekleyin\\ \texttt{\detokenize{#1}}}}%
+  }%
+}
+\newcommand{\katilimkutulari}{\par\vspace{3pt}\small $\boxtimes$ Ders içinde katılım sergiledim\par $\square$ Telafi yaptım}
+
+\newcommand{\haftaek}[1]{%
+  \IfFileExists{#1}{\par\vspace{4pt}\includegraphics[width=\linewidth,height=7cm,keepaspectratio]{#1}}{}%
+}
+
+\newcommand{\universite}{İstanbul Medipol Üniversitesi / Görsel İletişim Tasarımı}
+\newcommand{\dersadi}{Programlamaya Giriş}
+\newcommand{\hocaadi}{Meral Şentürk}
+\newcommand{\ogrenciadi}{Yasemin İrem Semen}
+\newcommand{\ogrencino}{86250012}
+\newcommand{\projeadi}{Anadolu'dan Masal Sandığı}
+\newcommand{\githublink}{\url{https://github.com/ysmnsmn/Anadoludan-Masal-Sandigi}}
+\newcommand{\youtubelink}{\url{https://youtu.be/tmD9LGv_FU4}}
+
+\begin{document}
+
+\begin{titlepage}
+\centering
+\vspace*{1cm}
+{\large \universite \par}
+\vspace{1.8cm}
+{\Huge\bfseries\color{ana} \projeadi \par}
+\vspace{0.4cm}
+{\Large Türk Masalları Derlemesi Web Sayfası \par}
+{\large Vize Raporu \par}
+\vspace{1.8cm}
+{\large \textbf{Ders:} \dersadi \par}
+{\large \textbf{Öğretim Üyesi:} \hocaadi \par}
+\vspace{1.2cm}
+{\large \textbf{Hazırlayan:} \ogrenciadi \par}
+{\large \textbf{Öğrenci No:} \ogrencino \par}
+\vspace{1.8cm}
+\fbox{\parbox{0.88\linewidth}{\centering\vspace{6pt}
+{\large\bfseries Proje Bağlantıları}\\[8pt]
+\textbf{GitHub deposu:}\\ \githublink \\[8pt]
+\textbf{YouTube sunum videosu:}\\ \youtubelink
+\vspace{6pt}}}
+\vfill
+{\large \today \par}
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+\section{Giriş}
+
+\subsection{Proje Özeti}
+Bu projede, Türk halk anlatısı geleneğinden seçilen tescilli masalları bir araya getiren, kullanıcı dostu ve işlevsel bir dijital masal arşivi web sayfası geliştirilmiştir. Amaç; HTML, CSS ve JavaScript teknolojilerini harici kütüphane veya eklenti kullanmaksızın (saf kod yapısıyla) bir araya getirerek estetik, çevrimdışı çalışabilen ve okunabilir bir arayüz ortaya koymaktır. Proje kapsamında 8 tescilli masal derlenmiş, anlık arama, favori sistemi ve punto (yazı boyutu) değiştirme gibi interaktif JavaScript özellikleri eklenmiştir.
+
+\subsection{Gereksinimlerin Karşılanması}
+\begin{center}
+\rowcolors{2}{acik}{white}
+\begin{tabular}{@{}p{8.2cm}c@{}}
+\toprule
+\rowcolor{ana}\textcolor{white}{\textbf{Gereksinim}} & \textcolor{white}{\textbf{Durum}} \\
+\midrule
+Masal sayısı 8--12 arasında (8 masal)         & $\boxtimes$ \\
+Tek HTML dosyası                                    & $\boxtimes$ \\
+Stil kodları içsel (\texttt{<style>} içinde)        & $\boxtimes$ \\
+Betik kodları içsel (\texttt{<script>} içinde)      & $\boxtimes$ \\
+İnternetsiz açılıp çalışıyor                        & $\boxtimes$ \\
+JavaScript sayfada anlamlı bir işlev görüyor        & $\boxtimes$ \\
+Masal metinleri kendi cümlelerimle yazıldı          & $\boxtimes$ \\
+Sayfa telefonda da düzgün görünüyor                 & $\boxtimes$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Masalların Seçimi}
+
+\begin{longtable}{@{}cp{4cm}p{3cm}p{5.4cm}@{}}
+\toprule
+\textbf{No} & \textbf{Masal} & \textbf{Tür} & \textbf{Seçilme nedeni} \\
+\midrule
+\endhead
+1 & Üç Haylaz Masalı & Hayvan masalı & Sorumluluk ve çalışkanlık teması barındırması nedeniyle seçilmiştir. \\
+2 & Limon Kız & Olağanüstü masal & Anadolu masallarındaki klasik motifleri ve dönüşüm ögelerini yansıtması için seçilmiştir. \\
+3 & Ayşecik ile Yasemin Sultan & Halk anlatısı & Toplumsal ön yargıları ve saf dostluğu ele alması nedeniyle seçilmiştir. \\
+4 & Ayı ve Yavru Enik & Hayvan masalı & Aklın ve zekânın fiziksel güçten üstün olduğunu vurgulaması için seçilmiştir. \\
+5 & Tombul Gözleme & Olağanüstü masal & Gündelik bir nesneyi mizahi ve olağanüstü bir maceraya dönüştürmesi nedeniyle seçilmiştir. \\
+6 & Balıkçı ve Deniz Kızı & Olağanüstü masal & Dürüstlük ve açgözlülük karşılaştırmasını başarılı bir şekilde işlemesi için seçilmiştir. \\
+7 & Aslan Padişah ile Fare & Hayvan masalı & Kimsenin küçük görülmemesi gerektiği evrensel dersini vermesi için seçilmiştir. \\
+8 & Üç Şaka & Mizahi anlatı & İnsanlara mizahi yolla ders verme ve akıl yürütme ögeleri içermesi nedeniyle seçilmiştir. \\
+\bottomrule
+\end{longtable}
+
+\section{Tasarım Kararları}
+
+\subsection{Konuya Uygunluk}
+Tasarım sürecinde Anadolu masallarının sıcak, nostaljik ve samimi atmosferini yansıtacak natural, yeşil ve kremsi tonlar tercih edilmiştir. Görsel ögeler ve renk paleti, dikkati yormadan uzun metinlerin rahatça okunabilmesini sağlamak amacıyla kurgulanmıştır.
+
+\subsection{Renk Paleti ve Yazı Tipi}
+\begin{center}
+\rowcolors{2}{acik}{white}
+\begin{tabular}{@{}llp{6.4cm}@{}}
+\toprule
+\rowcolor{ana}\textcolor{white}{\textbf{Ad}} & \textcolor{white}{\textbf{Kod}} & \textcolor{white}{\textbf{Nerede / neden kullandınız?}} \\
+\midrule
+Kağıt Kremi (Arka Plan) & \texttt{\#FAF8F5} & Sayfa genelinde gözü yormayan yumuşak bir zemin oluşturmak için kullanılmıştır. \\
+Koyu Orman Yeşili & \texttt{\#203F34} & Üstbilgi (header), footer ve vurgulu alanlarda geleneksel doğa hissi vermek için kullanılmıştır. \\
+Toprak Turuncusu / Akcent & \texttt{\#D88753} & Butonlarda, aktif sekmelerde ve dikkat çekilmesi gereken odak noktalarında kullanılmıştır. \\
+Serif (Georgia) & -- & Klasik kitap ve masal derlemelerinin tipografik hissini dijital ortama taşımak için seçilmiştir. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Okunabilirlik, Gezinme ve Duyarlı Tasarım}
+\begin{itemize}
+  \item \textbf{Okunabilirlik:} Zemin rengi ile koyu metin rengi arasında yüksek karşıtlık sağlanmış, okuma ekranında kullanıcıların punto (A+/A-) ayarı yapabilmesine imkan tanınmıştır.
+  \item \textbf{Gezinme:} Kullanıcılar arama çubuğu ve kategori filtrelerini kullanarak istedikleri masala saniyeler içinde ulaşabilmektedir.
+  \item \textbf{Duyarlı tasarım:} Esnek CSS Grid ve Flexbox yapıları sayesinde sayfa masaüstü, tablet ve akıllı telefon ekranlarında kusursuz görünmektedir.
+  \item \textbf{Tutarlılık:} Başlık stilleri, boşluk oranları ve renk paleti sayfa boyunca bütüncül bir tasarımla uygulanmıştır.
+\end{itemize}
+
+\section{Gerçekleştirme}
+
+\subsection{HTML Yapısı}
+Proje, tek bir \texttt{index.html} dosyası içerisinde yapılandırılmıştır. Üstbilgi (header), tanıtım alanı, arama/filtreleme çubukları, masal kartları için grid yapısı, tam metin okuma alanı (reader modal) ve kaynakça bölümleri semantik HTML etiketleriyle oluşturulmuştur.
+
+\subsection{İçsel CSS}
+Stil tanımlamaları \texttt{<style>} etiketi altında içsel olarak yazılmıştır. CSS Değişkenleri (\texttt{:root}) kullanılarak renk paleti merkezi olarak yönetilmiş, Flexbox ve Grid sistemleriyle modern bir yerleşim sağlanmıştır.
+
+\begin{lstlisting}[caption={İçsel CSS'ten örnek bir bölüm}]
+:root {
+  --ink: #27342e;
+  --paper: #fffaf0;
+  --green-dark: #203f34;
+  --orange: #d88753;
+}
+body {
+  margin: 0;
+  color: var(--ink);
+  background: var(--paper);
+  font-family: Georgia, serif;
+}
+\end{lstlisting}
+
+\subsection{İçsel JavaScript}
+Betik kodları \texttt{<script>} etiketi içinde yer almaktadır. Masal verileri bir JavaScript dizisi (\texttt{stories}) içinde nesne olarak tutulmakta; anlık arama, tür filtreleme, \texttt{localStorage} destekli favori yönetimi ve okuma ekranındaki punto (A+/A-) boyut değiştirme işlevleri dinamik olarak çalıştırılmaktadır.
+
+\begin{lstlisting}[caption={İçsel JavaScript'ten örnek bir bölüm}]
+function renderStories() {
+  const query = searchInput.value.trim().toLocaleLowerCase("tr-TR");
+  const filtered = stories.filter(story => {
+    return (story.title + " " + story.summary).toLocaleLowerCase("tr-TR").includes(query);
+  });
+}
+\end{lstlisting}
+
+\subsection{Sayfanın Özellikleri}
+Sayfa bünyesinde anlık arama filtrelemesi, favori kaydetme, interaktif okuma ekranı ve yazı boyutu ölçeklendirme özellikleri barındırmaktadır.
+
+\section{Yapay Zekâ Kullanımı}
+
+\begin{longtable}{@{}p{2.6cm}p{3.6cm}p{4.2cm}p{3.4cm}@{}}
+\toprule
+\textbf{Araç} & \textbf{Ne için kullandınız?} & \textbf{İstem (prompt) özeti} & \textbf{Sayfada nerede?} \\
+\midrule
+\endhead
+Gemini & Kod yapısı ve tasarım düzenlemesi & Saf HTML/CSS/JS ile tek dosya masal arşivi geliştirilmesi & Genel site mimarisi \\
+\bottomrule
+\end{longtable}
+
+\subsection{Anladığım ve Kendim Yaptığım Kısımlar}
+Yapay zekâ desteğiyle oluşturulan tüm kod bloklarının mantığı birebir incelenmiş ve öğrenilmiştir. Tasarım kararları, renk seçimleri ve içerik kurgusu tamamen kendi tercihlerim doğrultusunda şekillendirilmiştir.
+
+\section{Haftalık Katkılar}
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{1.7cm}%
+                    >{\raggedright\arraybackslash}p{6.4cm}%
+                    >{\centering\arraybackslash}p{6cm}@{}}
+\toprule
+\rowcolor{ana}\textcolor{white}{\textbf{Hafta}} & \textcolor{white}{\textbf{Yapılan çalışma}} & \textcolor{white}{\textbf{Görsel}} \\
+\midrule
+\endfirsthead
+\toprule
+\rowcolor{ana}\textcolor{white}{\textbf{Hafta}} & \textcolor{white}{\textbf{Yapılan çalışma}} & \textcolor{white}{\textbf{Görsel}} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+
+\textbf{1. hafta} &
+Proje planlaması, tema seçimi ve kavramsal tasarım çalışmalarının yapılması.\newline \textbf{Commit:} İlk konsept tasarımı\katilimkutulari &
+\\
+\midrule
+\textbf{2. hafta} &
+HTML ve dahili CSS ile temel sayfa düzeni oluşturuldu. JavaScript kullanılarak DOM üzerindeki temel etkileşimler (\texttt{click}, \texttt{dblclick}, \texttt{mouseover} ve \texttt{mouseout} olayları) ve dinleyiciler test edildi.\newline \textbf{Commit:} DOM olay dinleyicileri eklendi\katilimkutulari &
+\haftagorsel{hafta2.png}\haftaek{hafta2b.png} \\
+\midrule
+\textbf{3. hafta} &
+Kullanıcı girdileriyle (\texttt{input}) etkileşim kuruldu; koşullu yapılar ve \texttt{alert} uyarıları entegre edildi. Artırma ve azaltma butonlarıyla çalışan dinamik sayaç mekanizması geliştirildi.\newline \textbf{Commit:} Form girdileri ve sayaç mantığı\katilimkutulari &
+\haftagorsel{hafta3.png} \\
+\midrule
+\textbf{4. hafta} &
+JavaScript olay dinleyicileri kullanılarak buton tıklamalarıyla çalışan sayaç uygulaması pekiştirildi. Kullanıcı verilerinin koşullu yapılarla doğrulanması sağlandı.\newline \textbf{Commit:} Sayaç ve form doğrulama güncellemeleri\katilimkutulari &
+\haftagorsel{hafta4.png} \\
+\midrule
+\textbf{5. hafta} &
+JavaScript dizileri, \texttt{dataset} öznitelikleri ve \texttt{querySelectorAll} metodu kullanılarak etkileşimli kart eşleştirme mantığı geliştirildi. \texttt{setTimeout} ile zamanlanmış görsel güncellemeler yapıldı.\newline \textbf{Commit:} Kart eşleştirme ve dataset mantığı\katilimkutulari &
+\haftagorsel{hafta5.png} \\
+\midrule
+\textbf{6. hafta} &
+CodePen ortamında HTML elemanlarının özellikleri JavaScript kullanılarak dinamik hale getirildi. \texttt{onclick} olay yöneticisi ve koşullu yapılarla renk değişimi sağlandı.\newline \textbf{Commit:} Dinamik stil manipülasyonu\katilimkutulari &
+\haftagorsel{hafta6.png} \\
+\midrule
+\textbf{7. hafta} &
+Masal arşivi verilerinin dizi yapısına aktarılması ve arayüz kartlarına dinamik olarak basılması sağlandı.\newline \textbf{Commit:} Masal veri dizisi entegrasyonu\katilimkutulari &
+\haftagorsel{input_file_11.png} \\
+\midrule
+\textbf{8. hafta} &
+Arama çubuğu, kategori filtresi, favori sistemi ve punto ayar araçları son testlerden geçirilerek proje tamamlandı.\newline \textbf{Commit:} Final projesi tamamlandı\katilimkutulari &
+\haftagorsel{input_file_12.png} \\
+\end{longtable}
+
+\section{Test ve Değerlendirme}
+
+\begin{center}
+\rowcolors{2}{acik}{white}
+\begin{tabular}{@{}p{6cm}p{3.4cm}p{3.4cm}@{}}
+\toprule
+\rowcolor{ana}\textcolor{white}{\textbf{Özellik}} & \textcolor{white}{\textbf{Bilgisayar}} & \textcolor{white}{\textbf{Telefon}} \\
+\midrule
+Anlık Arama ve Filtreleme & Çalışıyor & Çalışıyor \\
+Favori Sistemi & Çalışıyor & Çalışıyor \\
+Punto Ayarı (A+/A-) & Çalışıyor & Çalışıyor \\
+Tam Metin Okuma Modalı & Çalışıyor & Çalışıyor \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Sunum Videosu}
+\begin{center}
+\begin{tabular}{@{}ll@{}}
+\textbf{Video süresi:} & 15:00 \\
+\textbf{Görünürlük:} & Listelenmemiş \\
+\textbf{Bağlantı:} & \youtubelink \\
+\end{tabular}
+\end{center}
+
+\subsection{Video Kontrol Listesi}
+\begin{itemize}
+  \item Süre 12--18 dakika aralığında.
+  \item Sunum boyunca kameram açık, yüzüm görünüyor.
+  \item Görünürlük Listelenmemiş.
+  \item Bağlantı çalışıyor.
+\end{itemize}
+
+\section{Sonuç ve Kendi Değerlendirmem}
+Bu proje sayesinde Türk halk kültürü ögelerini modern ve saf web teknolojileriyle harmanlama fırsatı buldum. Tek bir HTML dosyası içerisinde hem şık bir görsel tasarım ortaya koymayı hem de JavaScript ile gelişmiş arayüz işlevleri geliştirmeyi öğrendim.
+
+\section{Kaynakça}
+\begin{thebibliography}{9}
+\bibitem{k1} Kültür Portalı. \emph{Numan Kartal Masal Derlemeleri}. \url{https://kulturportali.gov.tr}, 2026.
+\bibitem{k2} Atatürk Kültür Merkezi Başkanlığı. \emph{Türk Masal Külliyatı}. \url{https://masal.gov.tr}, 2026.
+\bibitem{k3} MDN Web Docs. \emph{JavaScript Guide}. \url{https://developer.mozilla.org}, 2026.
+\end{thebibliography}
+
+\appendix
+\section{Teslim Kontrol Listesi}
+\begin{itemize}
+  \item MEBİS'e yalnızca bu raporun PDF'ini yükleyeceğim.
+  \item PDF dosya adı 86250012\_YaseminIremSemen\_vize.pdf biçiminde.
+  \item Kapaktaki bağlantılar doğru.
+  \item GitHub deposu herkese açık.
+  \item Sayfa içsel CSS ve içsel JavaScript kullanıyor.
+  \item Hazır taslak kullanılmadı.
+\end{itemize}
+
+\end{document}

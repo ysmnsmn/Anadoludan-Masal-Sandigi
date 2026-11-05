@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anadolu'dan Masal Sandığı</title>
+<style>
+:root {
+  --ink: #27342e;
+  --muted: #657166;
+  --paper: #fffaf0;
+  --cream: #f4ead5;
+  --green: #315b49;
+  --green-dark: #203f34;
+  --orange: #d88753;
+  --line: #e2d7bf;
+  --white: #ffffff;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  color: var(--ink);
+  background: var(--paper);
+  font-family: Georgia, "Times New Roman", serif;
+  line-height: 1.65;
+}
+button, input, select { font: inherit; }
+button, a { -webkit-tap-highlight-color: transparent; }
+a { color: var(--green); }
+:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
+.topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 18px; padding: 16px clamp(18px, 5vw, 72px);
+  border-bottom: 1px solid var(--line); background: var(--paper);
+}
+.brand { display: flex; align-items: center; gap: 10px; font-weight: bold; letter-spacing: .03em; }
+.brand-mark {
+  display: grid; place-items: center; width: 38px; height: 38px;
+  border-radius: 50%; background: var(--green); color: #fff8e9; font-size: 20px;
+}
+.navlinks { display: flex; gap: 22px; flex-wrap: wrap; }
+.navlinks a { text-decoration: none; font-family: Arial, sans-serif; font-size: .9rem; }
+.hero {
+  position: relative; overflow: hidden; padding: clamp(52px, 9vw, 110px) 20px 78px;
+  background: var(--green-dark); color: #fff8e9; text-align: center;
+}
+.hero:before, .hero:after {
+  content: ""; position: absolute; border: 1px solid rgba(255,248,233,.22);
+  border-radius: 50%; pointer-events: none;
+}
+.hero:before { width: 320px; height: 320px; left: -130px; top: -100px; }
+.hero:after { width: 420px; height: 420px; right: -180px; bottom: -260px; }
+.hero-kicker { font: 700 .76rem Arial, sans-serif; letter-spacing: .2em; text-transform: uppercase; color: #e6bd8e; }
+.hero h1 { max-width: 850px; margin: 14px auto 18px; font-size: clamp(2.4rem, 6vw, 5rem); line-height: 1.05; font-weight: 500; }
+.hero p { max-width: 610px; margin: 0 auto 28px; color: #e7e7d9; font-size: 1.08rem; }
+.primary-btn {
+  display: inline-block; border: 0; border-radius: 999px; padding: 12px 22px;
+  background: #e6bd8e; color: #243d32; font: 700 .95rem Arial, sans-serif;
+  text-decoration: none; cursor: pointer;
+}
+.hero-note { margin-top: 25px; color: #cbd6c8; font: .82rem Arial, sans-serif; }
+main { width: min(1120px, 92%); margin: 0 auto; }
+.intro { display: grid; grid-template-columns: 1.2fr .8fr; gap: 35px; padding: 58px 0 34px; align-items: center; }
+.eyebrow { color: #a65d35; font: 700 .75rem Arial, sans-serif; letter-spacing: .16em; text-transform: uppercase; }
+.intro h2, .section-heading h2 { font-size: clamp(1.8rem, 4vw, 2.8rem); line-height: 1.15; font-weight: 500; margin: 8px 0 14px; }
+.intro p { color: var(--muted); margin: 0; }
+.quote {
+  padding: 23px 25px; border-left: 3px solid var(--orange); background: #f5eddd;
+  color: #536156; font-style: italic;
+}
+.quote small { display: block; margin-top: 9px; font: .78rem Arial, sans-serif; color: #7a8177; }
+.controls { padding: 25px 0 16px; border-top: 1px solid var(--line); }
+.controls-top { display: flex; justify-content: space-between; align-items: end; gap: 20px; flex-wrap: wrap; }
+.section-heading h2 { margin-bottom: 4px; }
+.section-heading p { margin: 0; color: var(--muted); }
+.search-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 22px; }
+.search-row input, .search-row select {
+  min-height: 46px; border: 1px solid var(--line); border-radius: 10px;
+  background: #fffdf8; padding: 10px 13px; color: var(--ink);
+}
+.search-row input { flex: 1 1 260px; }
+.search-row select { flex: 0 1 220px; }
+.results-count { font: .85rem Arial, sans-serif; color: var(--muted); margin: 14px 0 0; }
+.story-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; padding: 18px 0 64px; }
+.story-card {
+  border: 1px solid var(--line); border-radius: 16px; overflow: hidden; background: #fffdf8;
+  display: flex; flex-direction: column; min-width: 0; transition: transform .18s ease, box-shadow .18s ease;
+}
+.story-card:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(40,55,43,.08); }
+.card-art {
+  min-height: 142px; display: grid; place-items: center; position: relative; overflow: hidden;
+  background: var(--art-bg, #e9e0ca); color: var(--art-ink, #315b49);
+}
+.card-art:before { content: ""; position: absolute; width: 145px; height: 145px; border: 1px solid currentColor; border-radius: 50%; opacity: .24; }
+.card-art:after { content: ""; position: absolute; width: 190px; height: 190px; border: 1px solid currentColor; border-radius: 50%; opacity: .15; }
+.card-symbol { z-index: 1; font-size: 3.7rem; filter: saturate(.8); }
+.card-number { position: absolute; top: 12px; left: 14px; font: .75rem Arial, sans-serif; letter-spacing: .12em; opacity: .8; }
+.card-body { padding: 18px; display: flex; flex-direction: column; flex: 1; }
+.category { color: #9b613e; font: 700 .7rem Arial, sans-serif; text-transform: uppercase; letter-spacing: .1em; }
+.card-body h3 { margin: 7px 0 8px; font-size: 1.28rem; line-height: 1.25; }
+.card-body p { margin: 0 0 18px; color: var(--muted); font-size: .96rem; flex: 1; }
+.card-actions { display: flex; align-items: center; gap: 8px; }
+.read-btn, .favorite-btn {
+  border: 1px solid var(--green); border-radius: 8px; padding: 9px 12px; cursor: pointer;
+}
+.read-btn { flex: 1; background: var(--green); color: white; font: 700 .85rem Arial, sans-serif; }
+.favorite-btn { background: transparent; color: var(--green); min-width: 42px; }
+.favorite-btn[aria-pressed="true"] { background: #f6e4d5; border-color: #b95d3a; color: #9e452b; }
+.empty { grid-column: 1 / -1; padding: 35px; text-align: center; color: var(--muted); border: 1px dashed var(--line); border-radius: 14px; }
+.reader {
+  display: none; margin: 0 0 60px; border: 1px solid var(--line); border-radius: 18px;
+  background: #fffdf8; overflow: hidden;
+}
+.reader.open { display: block; }
+.reader-head { padding: 24px clamp(18px, 4vw, 42px); background: #e9efdf; display: flex; justify-content: space-between; gap: 18px; align-items: start; }
+.reader-head h2 { margin: 5px 0 0; font-size: clamp(1.7rem, 4vw, 2.5rem); line-height: 1.2; font-weight: 500; }
+.close-btn { border: 1px solid #b7c6b4; background: transparent; color: var(--green-dark); border-radius: 8px; padding: 8px 12px; cursor: pointer; }
+.reader-content { max-width: 760px; padding: 26px clamp(18px, 5vw, 52px) 36px; margin: auto; }
+.reader-content p { font-size: 1.08rem; }
+.reader-content .source-note { padding-top: 14px; border-top: 1px solid var(--line); font: .86rem/1.6 Arial, sans-serif; color: var(--muted); }
+.reading-tools { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 clamp(18px, 5vw, 52px) 24px; }
+.tool-btn { background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; cursor: pointer; color: var(--ink); }
+.sources { padding: 38px 0 58px; border-top: 1px solid var(--line); }
+.sources h2 { font-weight: 500; font-size: 1.8rem; }
+.sources p, .sources li { color: var(--muted); }
+.sources li { margin: 9px 0; }
+.source-warning { padding: 14px 16px; background: #f6e9d8; border-radius: 10px; color: #62452e !important; }
+footer { padding: 25px 5%; background: var(--green-dark); color: #e7e7d9; text-align: center; font: .84rem Arial, sans-serif; }
+@media (max-width: 780px) {
+  .intro { grid-template-columns: 1fr; gap: 20px; padding-top: 40px; }
+  .story-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .navlinks { gap: 12px; }
+}
+@media (max-width: 520px) {
+  .topbar { align-items: flex-start; flex-direction: column; }
+  .navlinks { font-size: .85rem; }
+  .hero { padding-top: 58px; }
+  .story-grid { grid-template-columns: 1fr; }
+  .card-art { min-height: 125px; }
+  .controls-top { align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="#baslangic" style="text-decoration:none;color:inherit">
+    <span class="brand-mark" aria-hidden="true">✦</span><span>ANADOLU'DAN MASAL SANDIĞI</span>
+  </a>
+  <nav class="navlinks" aria-label="Ana gezinme">
+    <a href="#masallar">Masalları keşfet</a>
+    <a href="#hakkinda">Proje hakkında</a>
+    <a href="#kaynaklar">Kaynaklar</a>
+  </nav>
+</header>
+
+<section class="hero" id="baslangic">
+  <div class="hero-kicker">Sözlü kültürden dijital sayfalara</div>
+  <h1>Bir masal aç,<br>başka bir dünyaya geç.</h1>
+  <p>Anadolu'nun renkli anlatılarında padişahlar, hayvanlar, deniz kızları ve akılda kalan küçük dersler seni bekliyor.</p>
+  <a class="primary-btn" href="#masallar">Masal sandığını aç&nbsp; ↘</a>
+  <div class="hero-note">8 anlatı · Arama ve kategori filtresi · Çevrimdışı kullanım</div>
+</section>
+
+<main>
+  <section class="intro" id="hakkinda">
+    <div>
+      <div class="eyebrow">Bu derleme hakkında</div>
+      <h2>Her anlatı, kültürden kalan küçük bir iz.</h2>
+      <p>Bu sayfa, Türk halk anlatısı geleneğiyle ilişkilendirilen sekiz masalı bir araya getiren öğrenci projesidir. Başlıklara göz atabilir, arama yapabilir, ilgi duyduğun masalı açabilir ve favorilerine ekleyebilirsin.</p>
+    </div>
+    <aside class="quote">“Masallar yalnızca olağanüstü olayları değil, insanların korkularını, umutlarını ve dünyayı anlama biçimlerini de taşır.”
+      <small>Proje için hazırlanan tanıtım notu</small>
+    </aside>
+  </section>
+
+  <section class="controls" id="masallar">
+    <div class="controls-top">
+      <div class="section-heading">
+        <div class="eyebrow">Masal arşivi</div>
+        <h2>Hangi masalı okuyalım?</h2>
+        <p>Başlığa göre ara veya anlatı türünü seç.</p>
+      </div>
+    </div>
+    <div class="search-row">
+      <input id="searchInput" type="search" placeholder="Masal adı ara…" aria-label="Masal adı ara">
+      <select id="categorySelect" aria-label="Masal türüne göre süz">
+        <option value="all">Bütün türler</option>
+        <option value="Hayvan masalı">Hayvan masalı</option>
+        <option value="Olağanüstü masal">Olağanüstü masal</option>
+        <option value="Halk anlatısı">Halk anlatısı</option>
+        <option value="Mizahi anlatı">Mizahi anlatı</option>
+      </select>
+      <select id="viewSelect" aria-label="Gösterilecek masallar">
+        <option value="all">Bütün masallar</option>
+        <option value="favorites">Yalnızca favorilerim</option>
+      </select>
+    </div>
+    <p class="results-count" id="resultsCount" aria-live="polite">8 masal listeleniyor.</p>
+    <div class="story-grid" id="storyGrid"></div>
+  </section>
+
+  <section class="reader" id="reader" aria-live="polite" aria-labelledby="readerTitle">
+    <div class="reader-head">
+      <div><div class="eyebrow" id="readerCategory">Masal</div><h2 id="readerTitle">Masal başlığı</h2></div>
+      <button class="close-btn" id="closeReader" type="button">Kapat ✕</button>
+    </div>
+    <div class="reader-content" id="readerContent"></div>
+    <div class="reading-tools">
+      <button class="tool-btn" id="smallerText" type="button">A− Yazıyı küçült</button>
+      <button class="tool-btn" id="largerText" type="button">A+ Yazıyı büyüt</button>
+      <button class="tool-btn" id="resetText" type="button">Okuma ayarını sıfırla</button>
+    </div>
+  </section>
+
+  <section class="sources" id="kaynaklar">
+    <div class="eyebrow">Araştırma notları</div>
+    <h2>Masal kaynakları</h2>
+    <p>Bu sürümde masal kartlarında kullanılan metinler, kaynak metinlerin birebir aktarımı değil, site için yazılmış kısa tanıtım özetleridir. Tam metinleri kullanmadan önce kaynağın künyesini ve kullanım koşullarını raporda kontrol et.</p>
+    <ul>
+      <li><strong>Üç Haylaz Masalı:</strong> Kültür Portalı, Numan Kartal derlemesi. <a href="https://kulturportali.gov.tr/portal/uchaylazmasali" target="_blank" rel="noopener">Kaynağı aç</a></li>
+      <li><strong>Limon Kız:</strong> MEB okul sitesinde yayımlanan masal metni; ayrıca Gülda Çetindağ Süme'nin hakemli halkbilimi makalesi. <a href="https://sehitykoo.meb.k12.tr/meb_iys_dosyalar/32/02/705624/dosyalar/2021_05/20190539_Limon_KYz_MasalY.pdf" target="_blank" rel="noopener">MEB metni</a> · <a href="https://dergipark.org.tr/tr/pub/mahder/article/1526070" target="_blank" rel="noopener">Akademik makale</a></li>
+      <li><strong>Ayşecik ile Yasemin Sultan:</strong> Serdar Yıldırım imzalı çevrimiçi masal metni. <a href="https://www.masal.web.tr/cocuk-masallari/aysecik-ile-yasemin-sultan" target="_blank" rel="noopener">Kaynağı aç</a></li>
+      <li><strong>Ayı ve Yavru Enik:</strong> MASAL6 sitesinde yayımlanan metin. <a href="https://masal6.com/masal/ayi-ve-yavru-enik-masalini-oku/" target="_blank" rel="noopener">Kaynağı aç</a></li>
+      <li><strong>Tombul Gözleme:</strong> Türk Masal Külliyatı (TÜMAK), Atatürk Kültür Merkezi Başkanlığı. <a href="https://masal.gov.tr/" target="_blank" rel="noopener">Resmî masal arşivi</a></li>
+      <li><strong>Balıkçı ve Deniz Kızı:</strong> “Balıkçı ile Denizkızı” başlıklı derleme, <em>Anadolu Türk Halk Masalları 02</em>; ayrıca Atatürk Kültür Merkezi Başkanlığının “Deniz Kızı” kaydı. <a href="https://akmb.gov.tr/masallar/deniz-kizi/" target="_blank" rel="noopener">AKMB kaydı</a></li>
+      <li><strong>Aslan Padişah ile Fare:</strong> Türk Masal Külliyatı (TÜMAK), Atatürk Kültür Merkezi Başkanlığı. <a href="https://masal.gov.tr/" target="_blank" rel="noopener">Resmî masal arşivi</a></li>
+      <li><strong>Üç Şaka:</strong> Bu başlık için güvenilir ve başlıkla birebir eşleşen bir kaynak doğrulanamadı. Kaynağını öğretmeninin verdiği kitapta veya kütüphane kataloğunda kontrol etmeden bu başlığı “doğrulanmış kaynak” olarak rapora yazma.</li>
+    </ul>
+    <p class="source-warning"><strong>Önemli:</strong> İnternet bağlantısı olmadan sayfanın kendisi çalışır; bu bölümdeki dış kaynak bağlantılarını açmak için internet gerekir. Bu projede dış kütüphane, yazı tipi veya görsel dosyası yüklenmez.</p>
+  </section>
+</main>
+<footer>ANADOLU'DAN MASAL SANDIĞI · Programlamaya Giriş Vize Projesi</footer>
+
+<script>
+const stories = [
+  {
+    id: 1, title: "Üç Haylaz Masalı", category: "Hayvan masalı", symbol: "👦", bg: "#e7d9b8", ink: "#355844",
+    summary: "Yaramazlıklarıyla tanınan üç kardeşin babaları tarafından gönderildikleri zorlu görevler sayesinde sorumluluğu öğrenmesi.",
+    text: [
+      "Bir varmış bir yokmuş, Evvel zaman içinde, cinler cirit oynarken eski hamam içinde. Yellerin estiği, sellerin coştuğu bir ülke varmış. Ama ülke de ülke imiş ki; bir yanda devler tef çalar, öbür yanda çengiler oyun oynarmış. Ala gözlüler karakaşa sürme çeker, fidan boyular göz edermiş. Dertliler derman, dertsizler de dert bulurmuş, Düzensizliklerle esenlikler bu ülkede kol gezermiş. Buna ese de şaşar, bizim kambur köse de. Derken efendim hindi asmaya biner, evim dermiş. Eşekler ahırda bir uzun türkü tuttururmuş. Derken işe tavuklar, ördekler de karışır tam bir bayram havası esermiş.",
+      "İşte bu ülkede bir de çiftlik varmış. Bu çiftlikte de boyu kısa, kendisi topalacık, gözü alçacık horoz; boyu uzun, gururu yüksek hindi; bir de beş parmaklı, alçak ayaklı badi, yani ördek varmış. İmdi oturalım masal taşına, görelim neler gelmiş bu üç haylazın başına.",
+      "Çiftliktir, yaşanılacak yerdir demeyin. Bülbülü altın kafese koymuşlar da ah vatan demiş. Bizim üç ahbap çavuşlar da öyle. Aşağı gitmişler, yukarı gitmişler. Geceyi gün, günü gece etmişler. Ama olmamış. Canları çok sıkılmış. Bir gün oturmuşlar, kafa kafaya verip düşünmeye koyulmuşlar. Kırda hayat var, bakın açmış bin bir çiçek, Lâlenin alı çiğdemin sarısı, ana can katar menekşenin kokusu demişler de çiftlikten çıkmaya karar vermişler. Tarlada dolaşalım, yüce yüce dağlar aşalım, gelin kaçalım demişler. Vermişler pek çabuk karar.",
+      "Yola koyulmuşlar. Az gitmişler uz gitmişler, dere tepe düz, yedi yılla bir güz gitmişler. Altıda bir üstüde bir bu yerin, bari sağ oldukça yaşamak gerek diye söylenmişler. Sağa sola bakmadan kaçmış üç ahbap çavuşlar.",
+      "Hava güneşli, açıkmış. Kırlar geniş, cana can katarmış. Gezmek, tozmak, yaşamak denmiş de yaşamalarına bakmışlar. Sürülen sefa kârımızdır diye hayıflanmışlar. Ama böyle yerler pek gezmeye gelmez, tehlikeler çoktur. Tehlikelerin olduğu yerde hayat yoktur. Akıllarına getirmemişler bu durumları hiç üç ahbap çavuşlar. Başıboş dolaşmışlar.",
+      "Dolaşmak güzel şeydir işi yolunda olana, üç haylaz düşünmemiş hiç bunu. Zaman akıp gitmiş. Ne su veren olmuş ne de ekmek. Geri dönmek de pek güç gelmiş. Yaptıklarına pişman olmuşlar, ama çiftliğe dönmeyi de onurlarına yedirememişler. Birbirleri ile bakmışlar bakışmışlar, kişi ne çekerse kafasından çeker demişler. Ağrısız başımız, pişmiş aşımız vardı. Yolumuz açık, karnımız toktu. Ne düşüncesiz aklımız varmış, kaçmışız demişler. Ama iş işten geçmiş. Akşam olmak üzere imiş. Alaca karanlığın çöküşü ile gecenin korkusu başlamış. Derken dağın izli bir yerinden bir dev çıkagelmiş. Neye uğradıklarını şaşırmışlar. Karşı gelsek, güç yok. Gelmesek hayat yok demişler de kaçalım, belki kurtuluruz diye düşünmüşler. Koyulmuşlar yola, varmışlar Hindistan’a",
+      "Hindistan bir âlem. Ortalık düğün bayram. Kazanmanın yolunu aramışlar. Hokkabazlık yapıp iyi para kazanmışlar. Aldık yükümüzü, tamamladık gayri geçimimizi, gelin gidip kuralım evimizi demişler.",
+      "Nasiptendir her şey bu dünyada. Aç gözlü olmayacaksın, fazla da uzamayacaksın. Ama bizim üç ahbap çavuş uzamış, dönüp dolaşıp gelmişler bir mağaraya. Meğer orası devin hazinesi ile doluymuş, görenlerin gözlerini alırmış. Bizim üç ahbap çavuşların da gözlerini almış. Derken başlamışlar aşırmaya, ama tamamen kurtulduk demeye vakit kalmamış, umulmadık bir yerden çıkan tilki üç haylazı avlamış.",
+      "Ne diyelim, akılsız başın cezasını kişinin kendisi çekermiş. Onlar da çekmişler cezalarını, darısı bizim akılsızların başına."
+    ],
+    source: "Kültür Portalı, Numan Kartal derlemesi."
+  },
+  {
+    id: 2, title: "Limon Kız", category: "Olağanüstü masal", symbol: "🍋", bg: "#f1e8a9", ink: "#6b6b36",
+    summary: "Bir şehzadenin merakla peşine düştüğü Limon Kız'ı bulma macerası ve engelleri aşarak mutlu sona ulaşması.",
+    text: [
+      "Birvarmış bir yokmuş evvel zaman içinde kalbur saman içinde develer tellal, pireler berber iken, ben bu masalı okuyanın beşiğini tıngır mıngır sallar iken uzak diyarlarda Kaf dağının arkasındaki sarayda yaşayan bir prens varmış. Prens bütün ülkenin genç kızların hayran olduğu gözüpek, yakışıklı bir gençmiş. Fakat bu delikanlı gönlünün sultanını bir türlü bulamıyormuş. Bu duruma o kadar üzülüyormuş ki; kara kara düşünürken kral oğlunu bu durumda gördüğü için her gün çok üzülüyormuş. Diğer ülkenin dillere destan güzelliğiyle tanınan sırma saçlı güzel gözlü prensesle tanıştırıp evlendirmeyi düşünmüş.",
+      "Prens ve prenses bir araya geldiklerinde ikisinde de kalplerinde hiç sevgi tomurcuğu yeşermemiş. Birbirlerinden etkilenmemişler. İkisi de evlenmek istemediklerini söylemişler. Bu duruma çok üzülen kral ülkenin bilge adamına danışmaya karar vermiş. Bilge adam prensimizin gönlünü kazanacak kızımız belliki buralara ait değil. Var yolla sen prensimizi uzak diyarlara elbet diğer ülkelere vardığında bulacaktır gönlünün sultanını demiş. Kral da bilgeyi dinleyip prens için bir at hazırlatmış, yiyeceğini içeceğini ata yükleyip yolcu etmiş prensi, prensesini bulmadan geri dönme diye de eklemiş.",
+      "Prens üç gün yol aldıktan sonra yolda karşısına yaşlı bir adam çıkmış. Adamın yorgunluğu her halinden belli oluyormuş. Nereden gelirsin nereye gidersin ihtiyar diye sormuş o da iki köy uzakta oturduğunu yolda kaldığını anlatmış prense, prens ihtiyarı köyüne kadar atında götürmüş. Bu iyiliğin karşılığı olarak dile benden ne dilersen demiş ihtiyar adam. O da benim dileğim seveceğim kızı bulup evlenmek başka bir dileğim yoktur amca ama yine de beni düşündüğün için sağ ol demiş prens.",
+      "Bunun üzerine dede sakallarını sıvazlayıp cebinden iki tane limon çıkarmış. Bu limonların birinde senin evleneceğin kız saklı demiş ihtiyar. Tabii prens bu duruma gülüp geçmiş. İhtiyarın onu alaya aldığını düşünmüş. İhtiyar adam ama bu limonları kesinlikle bir çeşmenin önünde kesmelisin eğer limondan çıkan kız su içmezse ölür demiş. Tamam dedeciğim deyip gülüp atına binip yoluna devam etmiş. Kısa bir süre sonra suyu da yemeği de bitmiş. Çok susayınca aklına dedenin verdiği limonlar gelmiş. Atın üzerindeyken limonun birini kesmiş. İçinden güzeller güzeli bir kız çıkmış. Üç defa su isterim demiş. Fakat su bulamayınca kız bir anda buhar olup yok olmuş. Gördükleri karşısında şaşkına dönen prens kız yok olduğu için çok üzülmüş.",
+      "Susuzluktan dili damağına yapıştığı an bir çeşme başına denk gelmiş. Kana kana suyunu içtikten sonra aklına dedenin söyledikleri gelmiş. Cebinden limonu çıkartıp su başındayken kesmiş. Limonun içinden diğer kızdan daha da güzel bir kız çıkmış. O da aynı şekilde su isterim demiş. Prens ona hemen su verince kız ona gülümsemiş. Prens ilk görüşte âşık olmuş. Ama hâlâ gördüklerine bir anlam veremiyormuş. Kız başından geçenleri anlatmış kötü kalpli bir cadının onları limona hapsettiğini limondan kurtulsalar bile kulağındaki küpeler olmazsa bu sefer de bir kuşa dönüşeceğini anlatmış. Prens bu duruma çok üzülmüş. Ama seni bu büyüden kurtarmak için elimden ne geliyorsa yapıcam demiş ve saraya geri dönmüşler.",
+      "Kral babasına sürprizi haber vermek için saraya girmeden kıza sen bahçedeki çınar ağacına çık beni bekle demiş. Babamı alıp gelicem demiş. Kız ağaca çıkmış beklerken saray hizmetçilerinden bir kız ağacın altına oturmuş. Aynaya bakıyormuş. Keşke biraz güzel olsaydım çok çirkinim deyip iç geçiriyormuş. Tam o sırada ayna elinden yere düşmüş. Ayna yerdeyken ağacın üzerinde duran kızı fark etmiş. Güzelliğini çok kıskanmış. Sende kimsin öyle ağaçta ne işin var, gel aşağı arkadaş olalım demiş. Kızcağız da saf kalbiyle hemen inanıp aşağıya inmiş. Kimsin sen diye sorunca başından geçenlerin hepsini kıza anlatmış. Tabii küpesinden de bahsetmeyi unutmamış. Bunu duyan çirkin kız hemen kızın kulağındaki küpenin birini çıkarmasıyla kız bir güvercine dönüşmüş. Uçarak oradan uzaklaşmış.",
+      "Kızın küpesini kendi kulağına takan hizmetçi kız birden o kıza benzemiş. Ama küpenin diğer tekini alamadığı için sesi yine kendi sesi kalmış. Prens geri döndüğünde kızı ağaçtan aşağı çağırıp babasıyla tanıştırmış. Fakat sesi ve konuşma üslubu farklı olması prensin dikkatini çekmiş. Kral da bu durumdan biraz rahatsız olmuş. Prensin kalbi onu çalan kızmış gibi atmıyormuş artık ama yine de evlenmeye söz verdiği için düğün hazırlıkları başlamış. Prens gece yatağında yatarken camına bir kuş gelmiş ve durmadan camı tıklıyormuş. Camı açan prens kuşun ağladığını görünce üzülüp onu avcuna almış. Eline aldığında kuşun tek kulağındaki küpe dikkatini çekmiş. Kuşun alnına bir öpücük kondurup kulağından küpeyi çıkarmış ve böylece büyü bozulmuş. Kız eski güzel kız haline dönmüş. Olanları prense anlatmış. Prens hizmetçinin yaptıklarını öğrenince onu zindana attırmış. Limon kızla kırk gün kırk gece düğün yapmışlar, ermişler muradına biz çıkalım kerevetine."
+    ],
+    source: "MEB metni ve Gülda Çetindağ Süme'nin makalesi."
+  },
+  {
+    id: 3, title: "Ayşecik ile Yasemin Sultan", category: "Halk anlatısı", symbol: "👑", bg: "#efd9d7", ink: "#8a4d57",
+    summary: "Fakir bir köylü kızı olan Ayşecik ile sarayda yaşayan Yasemin Sultan'ın önyargıları yıkan saf dostluğu.",
+    text: [
+      "Ayşecik’ in babası sarayın sütçüsüydü. Saray yakınlarındaki bir kasabada küçük bir çiftliği vardı. Her sabah saraya taze süt götürürdü. Çiftliklerinden saray rahatça görülüyordu. İki yıldır Ayşecik arada sırada, “ Baba ben de seninle geleyim. Sarayın nasıl bir yer olduğunu çok merak ediyorum “ der dururdu. Fakat babası Ayşecik’ in kaybolacağından korkar, “ Biraz büyü de o zaman ” derdi.",
+      "Günlerden bir gün, sabah kahvaltısından sonra babası kızına şöyle dedi: “ Ayşecik artık on yaşına girdin. Kocaman bir kız oldun. Yarın sabah hazır ol bakalım. Sen de benimle beraber geliyorsun. “ Ayşecik bu habere çok sevindi. Hemen babasına sarıldı, onu yanaklarından öptü. Annesi kızının bu coşkulu sevincine katıldı, üçü bir sevgi yumağı meydana getirdiler.",
+      "Ayşecik gün boyu pek neşeliydi. İçi içine sığmıyordu. Heyecandan yerinde duramıyor, eli ayağı birbirine dolaşıyordu. Öğle üzeri mutfakta annesine yardım ederken, iki çay bardağı ile üç yemek tabağını kırmıştı. Tabii ki, bunları isteyerek yapmamıştı. Zaten annesi hiç mi hiç kızmamıştı. Sadece kendisine, “ Ayşecik, ben yemeği sofraya getirebilirim. İstersen masada oturup yemeğin gelmesini bekleyebilirsin, oldu mu canım kızım? ” demişti. Annesinin kızması için sebep yoktu ki…",
+      "Ayşecik ertesi sabah süt güğümlerinin at arabasına yüklenmesine yardımcı oldu. Arabaya bindi ve babasıyla birlikte saraya doğru yola koyuldular. Ayşecik sarayın bu kadar büyük olduğunu tahmin etmiyordu. Sarayın iç avlusunda babası süt güğümlerini teslim etmeden önce babasına sarayın içini görmek istediğini söyledi. Bunun üzerine saray görevlilerinden bir kadın Ayşecik’ e yardımcı verildi. Ayşecik kadınla beraber sarayın odalarını, salonlarını gezdi, dolaştı. Bir koridordan geçerken karşıdan gelmekte olan beş kız gördüler. Görevli kadın, Ayşecik’ e en öndekinin Yasemin Sultan olduğunu, bir şey sorarsa cevap vermesini, sözlerine dikkat etmesini usulca söyledi. Yasemin Sultan arkasında nedimeleri olduğu halde yanlarına yaklaştı. Ayşecik’ i bir süre süzdükten sonra görevli kadına dönerek, “ Evet, misafirimiz kim oluyor? ” diye sordu.",
+      "Görevli kadın: “ Efendim, bu kız sütçünün kızı. Saraya ilk kez geliyormuş. Benden kendisini sarayın içinde gezdirmem istendi. “",
+      "Yasemin Sultan: “ Ya demek öyle…Ne kadar güzel ” dedikten sonra Ayşecik’ e dönerek: “ Sarayı beğendiğinizi umarım, arkadaşım. Adınızı öğrenebilir miyim? “",
+      "Ayşecik kendisi ile aynı yaşlarda olan Yasemin Sultan’ ın dostça tavırlarından çok memnun olmuştu. Hele kendisine ‘arkadaşım‘demesi yok mu?.. Bir dakika önceki heyecanını üzerinden atıverdi, rahatladı ve sesine tatlı bir çeşni vererek: “ Efendim, adım Ayşecik’tir. Bizim evden saray rahatça görülüyor. Hep merak ederdim, acaba nasıl bir yer diye. İşte sonunda bu amacıma ulaştım. Geldim, sarayı gezdim, gördüm. Gerçekten büyük ve güzel bir yermiş. Hayran olmamak elde değil. Burasını çok sevdim. Bizim evimiz buraya göre oldukça küçük. Fakat ben evimi de çok seviyorum “ deyince Sultan’ ın arkasında duran nedimeler gülüştüler. Yasemin Sultan şöyle bir arkasına dönüp baktıktan sonra hafifçe tebessüm ederek, “ Ayşecik, gel istersen odama geçelim, orada konuşmamıza devam ederiz ” dedi.",
+      "Ayşecik ile Yasemin Sultan, iki saati aşkın bir süre konuştular, dertleştiler. Sonra nedimeleri öğle yemeği için padişahın beklediğini Sultan’ a haber verdiler. Ayşecik ile Yasemin Sultan, yarın sabah yeniden buluşmak dileğiyle ayrıldılar. Ayşecik babasıyla sarayın iç avlusunda buluştu. Süt güğümleri at arabasına yüklenmişti. Arabaya binip evlerine doğru yola koyuldular. Yemekten sonra padişah, Yasemin Sultan‘ a sütçünün kızı ile odasında görüştüğünden haberi olduğunu, bunu yanlış bir davranış biçimi olarak değerlendirdiğini, bir Sultan’ ın alelade bir köylü kızıyla arkadaş olmasının saray erkânı tarafından hoş karşılanmayacağını söyledi.",
+      "Bunun üzerine Yasemin Sultan: “ Ayşecik sizin tarafınızdan biraz olsun tanınsaydı, onun hakkındaki düşünceleriniz mutlaka olumlu olurdu. Ayşecik, alelade değil, fevkalade bir köylü kızıdır. İnsanlar giydikleri elbiselere, yaşadıkları çevreye bakılarak değerlendirilemez. Ayşecik…” diye konuşurken, padişah sinirli bir şekilde ayağa kalktıktan sonra; “ Ayşecik veya Fatmacık, kim olursa olsun… Onunla bir daha görüşmeyeceksin!.. İşte bu kadar! ” diye bağırınca Yasemin Sultan ayağa kalktı ve ağlayarak uzaklaştı.",
+      "Ertesi sabah babası süt güğümlerini görevlilere teslim ederken Ayşecik, saray avlusunda boşu boşuna bekledi. Öğle vakti babasıyla birlikte eve dönerken, cevabını düşünüp bulamadığı soru şuydu: Yasemin Sultan ile görüşmelerinin hangi sebepten ötürü engellendiği? ..",
+      "Yasemin Sultan, Ayşecik ile görüştürülmemesine çok üzüldü. Yemeden, içmeden kesildi. Birkaç gün sonra hastalandı. Yatağında devamlı olarak “ Ayşecik.. Ayşecik..” diye sayıklıyor, günden güne sararıp soluyordu. Ülkenin en iyi doktorlarının çabası boşuna oldu. Sonunda padişah Ayşecik’ in saraya getirilmesini istedi.",
+      "Yasemin Sultan Ayşecik’in gelmesine çok sevindi. Onun berrak bir su kadar temiz ve tatlı sesi hastalığının en iyi ilacı oldu.\nAğlayan gözleri güldü\nYanağında güller açtı\nBir hafta geçti, geçmedi\nİyileşti, ayağa kalktı.\nPadişah da onu pek sevdi\n“İkinci kızım sensin“dedi\nSevgiyle bağrına bastı\nHatasını bağışlattı…"
+    ],
+    source: "Serdar Yıldırım imzalı çevrimiçi masal metni."
+  },
+  {
+    id: 4, title: "Ayı ve Yavru Enik", category: "Hayvan masalı", symbol: "🐻", bg: "#d9e5d5", ink: "#355844",
+    summary: "Ormanda kaybolan tecrübesiz bir köpek yavrusunun aklını kullanarak kocaman bir ayıdan kurtulma hikayesi.",
+    text: [
+      "Kocaman, yaşlı ağaçlarla kaplı gür bir ormanda mutlu bir ayı ailesi yaşarmış. Anne ayı, baba ayı ve üç yavruları varmış. Her sabah güne birlikte başlarlar, ardından herkes kendi işini yapmak için yuvalarından ayrılırmış. Anne ayı yuvayı düzenler, baba ayı yiyecek aramaya gider, büyük kardeşler de ormanın işlerine yardım edermiş.",
+      "Üç kardeşten en büyüğü kuru dallar ve odunlar toplar, ortanca kardeş dere kenarına gidip balık avlarmış. Minik ayı ise henüz çok küçük olduğu için ona bir görev verilmezmiş. Bu durum minik ayının kalbini çok kırıyormuş. Ailesine yardım edemediğini düşündükçe kendini işe yaramaz hissediyor, herkes çalışırken bir köşede yalnız kalıyormuş.",
+      "Minik ayı zaman zaman kardeşlerine katılmak istermiş. Büyük kardeşi ormana giderken ona, “Ben de seninle gelebilir miyim?” diye sorar, ama aldığı cevap hep aynı olurmuş. Ortanca kardeşi balık avına giderken de sonuç değişmezmiş. Annesiyle birlikte yuva dışına çıkmak istediğinde ise kaybolmasından korktukları için izin verilmezmiş. Oysa hepsi onu korumak istese de minik ayı bunu anlayamaz, kendisini dışlanmış sanırmış.",
+      "Bir gün yine böyle üzgün bir haldeyken minik ayı dayanamayıp ağlamaya başlamış. Tam o sırada baba ayı yanına gelmiş ve onu dikkatle dinlemiş. Sonra yumuşak bir sesle, “Yanılıyorsun,” demiş. “Herkesin yapabileceği işler vardır.” Minik ayı şaşkınlıkla babasına bakmış. Baba ayı onu ormanın derinliklerine götürmüş.",
+      "Ağaçların arasında dar patikalar varmış. Baba ayı iri gövdesiyle bu dar yerlerden geçemezken, minik ayı kolayca ilerlemiş. Kısa bir süre sonra bir ağacın kovuğunda bal peteği bulmuş. Küçük patileriyle peteği dikkatlice çıkarmış ve babasına götürmüş. Baba ayı sevinçle balı torbasına yerleştirmiş.",
+      "Sonra birlikte elma ve armut ağaçlarının bulunduğu açıklığa gitmişler. Alçak dallardaki meyveler çoktan toplanmış, sadece yüksek dallarda meyve kalmış. Baba ayı minik ayıyı omuzlarına almış. Minik ayı yukarıdan elma ve armutları tek tek koparıp babasının torbasını doldurmuş.",
+      "Akşam yuvalarına döndüklerinde minik ayının yüzü mutluluktan parlıyormuş. Baba ayı gülümseyerek, “Gördün mü?” demiş. “Küçük olmak işe yaramaz olmak değildir. Önemli olan, gücüne uygun işi bilmektir.” Minik ayı bunu hiç unutmayacağına söz vermiş. O günden sonra kendine güvenmiş ve bir daha asla kendini gereksiz hissetmemiş."
+    ],
+    source: "MASAL6 sitesinde yayımlanan metin."
+  },
+  {
+    id: 5, title: "Tombul Gözleme", category: "Olağanüstü masal", symbol: "🥞", bg: "#f1d5b5", ink: "#895b38",
+    summary: "Üç yaşlı kadının ellerinden kaçan lezzetli ve tombul bir gözlemenin maceraları.",
+    text: [
+      "Bir zamanlar küçük bir köyde üç yaşlı kadın yaşarmış. Bu kadınlar, bir gün kahvaltıda ne yapalım, ne yapalım, diye düşünürlerken birden akıllarına gözleme yapmak gelmiş. Sonra hep birlikte gözleme yapmak için mutfağa girmişler. Başlamışlar gözlemeyi yapmaya. Unu, sütü ve tuzu karıştırıp bir hamur elde etmişler. Daha sonra hamuru tavaya koyarak pişirmeye başlamışlar. Gözleme pişerken daha çok acıkmışlar. Gözlemenin kokusu geldikçe kadınların mideleri guruldamaya başlamış.",
+      "Gözleme pişmiş pişmesine ama yaşlı kadınları görünce çok korkmuş. Onlar tarafından yenmek istememiş. Çünkü onlar kimseye yardım etmeyen, sadece kendi zevklerine düşkün kadınlarmış. Gözleme önce tavadan hopp diye yere zıplamış, daha sonra da evden kaçmış. Üç kadın, gözlemenin kaçtığını görünce telaştan bağırıp çağırmaya başlamışlar ama nafile, gözleme çoktan gözden kaybolmuş bile.",
+      "Güneşli bir sabahın erken saatlerinde gözleme, mutlu mutlu yuvarlanıyormuş. Gözlemenin karşısına ansızın bir kedi çıkmış. Kedi, gözlemeyi görünce hafiften mırlayarak:\n— Selam, gözleme kardeş, demiş.\nGözleme de haylazca:\n— Selam, uzun bıyık, demiş.\n— Şişman gözleme, ne olur dur. Seni yemek istiyorum, demiş kedi.\nGözleme, bir yandan yuvarlanmış bir yandan da:\n— Hadi oradan, az önce üç yaşlı nineden kaçtım. Sen de beni yakalayamazsın ki, diyerek ormana doğru yuvarlanmış.",
+      "Gözleme, durmadan yuvarlanıyormuş, birden bir tilki ile karşılaşmış. Tilki gülerek:\n— Selam gözlemecik, demiş.\nGözleme de:\n— Selam, kızıl kürk, demiş.\nSonra tilki dilini yalayarak:\n— Yağlı, şişman gözleme, bir dur; soluklan da seni güzelce yiyebileyim, demiş.\nGözleme, daha da hızlanarak:\n— Hadi oradan, ben üç nineden ve bir uzun bıyıklı kediden kaçtım. Sen de beni yakalayamazsın ki, demiş ve kaçmış.",
+      "Tombul gözleme yol boyunca bir sürü hayvanla karşılaşmış ama hepsini atlatmayı başarmış. Hava da gittikçe kararmaya başlamış. Sonunda gözleme de yorulmuş. Ama onu yemeyi hak edecek kimseyi bulamamış. En sonunda önüne üç küçük çocuk çıkmış. Bu çocuklar, anne babasız, yapayalnız çocuklarmış. Çocuklar, gözlemeyi görünce sevinmişler. Ona üzgün ve perişan bir hâlde:\n— Güzel gözleme, yalvarırız, dur. Bütün gün yürüdük ama yiyecek hiçbir şey bulamadık, izin verirsen seni yiyebilir miyiz? Biz çok acıktık, demişler.",
+      "Gözleme sevinmiş, yerinde hoplayıp zıplamaya başlamış. Artık faydalı olabileceği, birilerine yardım edebileceği için çok mutlu olmuş. Bu yüzden hemen çocukların torbasına girmeyi kabul etmiş ve zıplamış. Çocuklar da bir yerde oturmuşlar, gözlemeyi paylaştıktan sonra güzelce yemişler. Böylece hem gözleme hem de çocuklar mutlu uyumuşlar. Gökten üç elma düşmüş, biri bu masalı anlatanın, biri dinleyenin, biri de ihtiyaç sahiplerine yardım edenlerin başına…"
+    ],
+    source: "Türk Masal Külliyatı (TÜMAK), Atatürk Kültür Merkezi Başkanlığı."
+  },
+  {
+    id: 6, title: "Balıkçı ve Deniz Kızı", category: "Olağanüstü masal", symbol: "🧜", bg: "#d1e6e5", ink: "#2f6667",
+    summary: "Deniz kenarında yaşayan iyi kalpli fakir bir balıkçının dalgalar arasında yaşadığı sihirli macera.",
+    text: [
+      "Bir zamanlar küçük bir sahil kasabasında yaşayan bir balıkçı varmış. Balıkçı her sabah oltasını alıp denize açılır, “Rastgele!” deyip kısmetini yakalamak için oltasını denize atarmış. Bir gün balıkçının oltasına büyük bir balık takılmış. Balıkçı ne yaptıysa büyük balığı bir türlü teknesine çekememiş ve sonunda büyük balıkla birlikte oltası da denize düşmüş.",
+      "Balıkçı çok üzülmüş; çok sevdiği oltasını kaybettiği için ağlamaya başlamış. O sırada birden karşısına Deniz Kızı çıkmış. Deniz Kızı, balıkçının hikâyesini dinledikten sonra denize dalmış ve elinde gümüş bir olta ile geri dönmüş.",
+      "“Bu benim oltam değil,” demiş balıkçı.\nBunun üzerine Deniz Kızı oltayı tekrar denize bırakmış, bu kez altın bir olta ile yüzeye çıkmış.\n“Bu da benim oltam değil,” demiş balıkçı yine.",
+      "Deniz Kızı üçüncü kez denize dalmış ve bu kez balıkçının kendi oltasıyla geri dönmüş.\n“İşte bu benim oltam,” demiş minnettar balıkçı.\nDeniz Kızı, adamın dürüstlüğünden çok etkilenmiş ve ona altın ile gümüş oltaları da vererek ödüllendirmiş.",
+      "Balıkçı evine dönmüş ve hikâyesini arkadaşlarına anlatmış. Balıkçının hikâyesini duyan kıskanç bir arkadaşı, aynı şeyi yapmak istemiş. Aynı yere gitmiş ve oltasını bilerek denize atmış.",
+      "Bir süre sonra Deniz Kızı yine belirmiş ve denize dalarak altın bir olta çıkarmış. Adam hırsla oltaya uzanmış ve “Bu benim oltam!” diye bağırmış. Fakat Deniz Kızı, adamın dürüst olmadığını anlamış. Deniz Kızı, adamın açgözlü olduğunu fark etmiş. Ne altın oltayı vermiş ne de onun kendi oltasını geri getirmiş. Böylece adam, dürüst olmayanların sonunda her şeyini kaybedeceğini anlamış.",
+      "Bu masaldan çıkarılacak ders: Dürüstlük her zaman kazandırır!"
+    ],
+    source: "Anadolu Türk Halk Masalları ve AKMB kaydı."
+  },
+  {
+    id: 7, title: "Aslan Padişah ile Fare", category: "Hayvan masalı", symbol: "🦁", bg: "#ead8bd", ink: "#7b5535",
+    summary: "Ormanlar padişahı aslanın küçümsediği küçük bir farenin hayatını kurtarması ve dostlukları.",
+    text: [
+      "Bir varmış bir yokmuş, evvel zaman içinde, kalbur saman içinde, develer tellal iken, pireler berber iken, ben anamın beşiğini tıngır mıngır sallar iken, anam düştü beşikten, babam düştü eşikten, az gittik uz gittik, dere tepe düz gittik, altı ay bir gündüz gittik, bir de dönüp baktık ki bir arpa boyu yol gitmişiz.",
+      "Güzel bir sonbahar sabahı ormanların padişahı aslan, bir ağacın gölgesinde yatmış, güneşin keyfini çıkartıyormuş. Korkak fare de avlanmak için ormanda gezintiye çıkmış. Fare olabildiğince sessiz, yapraklar altından korkak ve ürkek adımlarla ormanda dolaşıyormuş ki birden kendini aslan padişahın pençesinin altında bulmuş. Fare başlamış bağırmaya:\n— Vik vik vik! Beni kurtaran yok mu, demiş.",
+      "Kim zavallı fareyi kurtarabilir ki aslan padişahın pençeleri arasından? Aslan ayağa kalkmış, tam hamle yapacakmış ki can havliyle atılan yardım çığlığını duymuş ve pençesinin altındaki fareyi fark etmiş:\n— Oh oh oh, diye gülmüş.\nAvının ayağının altında olduğuna pek sevinmiş. Gerçi karnı da çok acıkmamış. Aslan fareyle eğlenmeye başlamış. Fare korkuyla aslana:\n— Aman padişahım, ben ettim, sen etme. İstemeden kendimi burada buldum. Sen ormanların padişahısın. Bu seferlik beni yeme, bağışla, demiş.",
+      "Aslan:\n— Neden bağışlayayım? Ayağıma gelmiş av hiç bağışlanır mı? Ben de tam ava çıkıyordum. Seni yedikten sonra burada biraz daha güneşin keyfini çıkartırım, demiş.\nFare aslana:\n— Sen ormanların padişahısın, bense küçük bir fareyim. Ben senin karnını bile doyurmam. Bir seferlik affetsen ne olur ki, demiş.",
+      "Aslanın son derece kararlı olduğunu anlayan fare aslana son bir şey daha söylemek istemiş:\n— Padişahım, bak beni bir seferlik affet, bir gün ben de senin hayatımı kurtarırım, demiş.\nBöyle deyince aslanın keyfi kaçmış. Biraz da öfkelenerek:\n— Sen bu küçük hâlinle bana nasıl yardım edebilirsin ki zavallı fare, demiş.\nFare:\n— Hayatımı bağışlayıp bana bir şans verirseniz, inşallah bir gün bunu size ispatlayabilirim, demiş.",
+      "Aslan padişah, farenin bu isteğini yerine getirmiş, fareyi pençesinin arasından serbest bırakmış. Fare özgür kalmanın vermiş olduğu coşkuyla evine koşmuş.",
+      "Aradan günler geçmiş. Fare yine güzel bir ilkbahar sabahı ormanda gezintiye çıkmış. Bu sefer daha tedbirli ve ürkekmiş. Etrafı kolaçan ederken uzaklardan bir homurtu sesi duymuş. Sesi merak ederek sesin geldiği yöne gitmeye başlamış.",
+      "Sesin geldiği yere vardığında bir de ne görsün? Ormanlar padişahı aslan avcıların ağına düşmüş, homur homur homurdanmıyor mu? Beklediği zamanın geldiğini düşünen fare, hemen harekete geçmiş. Süratle tanıdığı, bildiği bütün arkadaşlarına haber göndermiş. Kendisini tanıyan bütün farelerin söylediği yere gelmelerini istemiş. Biz diyelim yüz, siz deyin bin fare çok kısa zamanda oraya gelmişler. Fareler gördükleri manzara karşısında küçük dillerini yutacak kadar şaşırmışlar. Gür bir fare sesi ortalığı yatıştırmış:\n— Haydi arkadaşlar, iş başına! Bütün ipler kesip ormanların padişahını kurtaralım. Hücum, demiş.",
+      "Çok kısa zamanda ipler kesilmiş. Ormanların padişahı önce yere düşmüş. Ayağa kalktığında gözlerine inanamamış. Rüya görüyorum sanmış. Kendisini kimin kurtardığına bir türlü karar verememiş. Yaprakların arasından ince bir ses:\n— Geçmiş olsun padişahım. Şimdi nasılsınız acaba, demiş.",
+      "Aslan bu sese yabancı değilmiş. Yaprağın altındaki fareyi görünce önce irkilmiş, sonra şaşkınlığına devam etmiş. Fareye:\n— Yoksa beni sen mi kurtardın, demiş.\nFare:\n— Evet, sayın padişahım ama tek başıma değil, demiş.\nAslan padişah gür bir ses ve mahcup bir edayla fareye:\n— Nasıl becerdin bunu, demiş.\nFare:\n— Arkadaşlarımı toplayıp kemirgenlik özelliğimizi ortaya koyduk padişahım, demiş.",
+      "Aslan padişah önce olabilir mi, diye düşünmüş, sonra fareye inanmış. Fareyi zamanında küçümsediği için utancından kıpkırmızı olmuş. Kocaman ağzından şu sözcükler dökülmüş:\n— İyi ki seni yememişim ve serbest bırakmışım. Bundan sonra sen benim can dostumsun, demiş.\nO günden sonra aslan padişah ile fare iyi bir dost olmuşlar. Ormanın içinde huzur içinde yaşamlarını sürdürmüşler. Çocuklar siz siz olun kimseyi küçük görmeyin. Her canlının farklı bir özelliğinin ve gücünün olduğunu da unutmayın."
+    ],
+    source: "Türk Masal Külliyatı (TÜMAK), Atatürk Kültür Merkezi Başkanlığı."
+  },
+  {
+    id: 8, title: "Üç Şaka", category: "Mizahi anlatı", symbol: "🐰", bg: "#e3d9ee", ink: "#644d7a",
+    summary: "Kurnaz tavşanın tarladaki havuçlar yüzünden köylüyle yaşadığı eğlenceli ve şakalarla dolu anlaşması.",
+    text: [
+      "Bir zamanlar üç tane candan arkadaş varmış. Onların bütün günleri, insanlara şaka yaparak geçermiş. Şaka ile insanlara nasihatler verir ve onların akıllarını kullanmalarını sağlarlarmış. Bir musibetin bin nasihatten iyi olduğuna inanırlarmış. Bir gün kasabada pazar kurulmuş. Yakın köylerden bir sürü insan, kasabaya akın etmiş. Kasabanın meydanı kum gibi insan kaynıyormuş. Bu üç arkadaş, eşeğinin sırtında sallana sallana kendilerine doğru gelen bir köylü görmüşler. Ali arkadaşlarına dönerek:\n— Ben şu adamın çıngıraklı keçisini ona haber etmeden alabilirim, demiş.",
+      "Veli de:\n— Ben de üstüne bindiği eşeğini alırım, demiş.\nMustafa da aşağı kalır mı:\n— Ben de sırtındaki elbiselerini alırım, demiş.\nÜçü de dediklerini yapmak için işe koyulmuşlar. Önce Ali yavaş yavaş keçinin peşine takılmış. Hayvanın boynundaki çıngırağı çözüp sokaklardan birine sapmış. Köylü çıngırak sesini duyduğu için keçinin de peşinden geldiğini sanıyormuş. Tam pazara gireceği sırada bir de bakmış ki keçisinin yerinde yeller esiyor. Eşeğinden inmiş, gelene geçene keçisini sormaya başlamış.",
+      "O esnada köylüye doğru yaklaşan Veli:\n— Az evvel güzel bir keçiyi şu sokağa doğru sürükleyen bir adam gördüm, demiş.\nKöylü Veli’yi hayırsever zannetmiş. Ona:\n— Oğlum, sen şu eşeğe biraz bak, ben şu keçiyi koşup yakalayayım, demiş.\nVeli de kabul etmiş. Köylü sokakların hepsini bir bir dolaşmış ama keçisini bulamamış. Çaresiz kalan ihtiyar köylü eli mahkûm eşeğinin yanına geri dönmüş. Ama bakmış ki eşeğinin yerinde yeller esiyor. Gelen geçene sormuş soruşturmuş, eşeği yok.",
+      "Şaşkın şaşkın dolaşmaya başlamış. Giderken yolun kenarında, bir kuyunun başında, dövüne dövüne ağlayan Mustafa’ya rastlamış. Yaklaşmış:\n— Senin derdin ne hemşerim, ne ağlayıp duruyorsun, demiş.\nMustafa:\n— Ah hemşerim ah! Ben ağlayayım da kimler ağlasın, benim derdim çok büyük. Ustamın bir yere götürmek için verdiği bir kutu altını kuyuya düşürdüm, beni hırsız sanacaklar şimdi, demiş.",
+      "Köylü adama, kuyuya inip kutuyu almasını söylemiş. Ama adam:\n— Yüzme bilmem ben, keşke alabilsem. Bir alan bulursam, iki altın veririm, demiş.\nİki altını duyan köylü hemen üstünü çıkarmış, atlamış kuyuya. Köylü kuyuya inmiş, bakmış kutu falan yok, bağırmaya başlamış:\n— Hemşerim burada kutu yok,\nKöylüye cevap veren olmamış. Çıkmış kuyudan, bakmış ne adam var ne elbiseleri.",
+      "İyice şaşkına dönmüş. Biraz sonra kahkahalarla bizim üç arkadaş gelmiş. Köylüye şaka yaptıklarını söylemişler. Elbiselerini, keçisini ve eşeğini ona geri vermişler. Köylünün gönlünü almak için onu kasabanın en güzel lokantasına götürüp güzelce karnını doyurmuşlar. Bir daha da böyle herkese inanmamasını söylemişler. İhtiyar köylü, o günden sonra herkese inanmamış, daha dikkatli olmuş ve mutlu bir hayat sürmüş."
+    ],
+    source: "Geleneksel halk anlatısı derlemeleri."
+  }
+];
+
+const grid = document.getElementById("storyGrid");
+const searchInput = document.getElementById("searchInput");
+const categorySelect = document.getElementById("categorySelect");
+const viewSelect = document.getElementById("viewSelect");
+const resultsCount = document.getElementById("resultsCount");
+const reader = document.getElementById("reader");
+const readerTitle = document.getElementById("readerTitle");
+const readerCategory = document.getElementById("readerCategory");
+const readerContent = document.getElementById("readerContent");
+
+let favorites = [];
+try {
+  const savedFavorites = localStorage.getItem("masalFavorileri");
+  favorites = savedFavorites ? JSON.parse(savedFavorites) : [];
+  if (!Array.isArray(favorites)) favorites = [];
+} catch (error) {
+  favorites = [];
+}
+let fontSize = 1.08;
+
+function renderStories() {
+  const query = searchInput.value.trim().toLocaleLowerCase("tr-TR");
+  const category = categorySelect.value;
+  const view = viewSelect.value;
+  const filtered = stories.filter(story => {
+    const matchesText = (story.title + " " + story.summary).toLocaleLowerCase("tr-TR").includes(query);
+    const matchesCategory = category === "all" || story.category === category;
+    const matchesView = view !== "favorites" || favorites.includes(story.id);
+    return matchesText && matchesCategory && matchesView;
+  });
+  resultsCount.textContent = filtered.length + " masal listeleniyor.";
+  grid.innerHTML = "";
+  if (filtered.length === 0) {
+    grid.innerHTML = '<div class="empty">Bu ölçütlerle eşleşen masal bulunamadı. Arama kelimesini veya filtreyi değiştirmeyi dene.</div>';
+    return;
+  }
+  filtered.forEach(story => {
+    const card = document.createElement("article");
+    card.className = "story-card";
+    card.innerHTML = `
+      <div class="card-art" style="--art-bg:${story.bg};--art-ink:${story.ink}">
+        <span class="card-number">${String(story.id).padStart(2, "0")} / 08</span>
+        <span class="card-symbol" aria-hidden="true">${story.symbol}</span>
+      </div>
+      <div class="card-body">
+        <div class="category">${story.category}</div>
+        <h3>${story.title}</h3>
+        <p>${story.summary}</p>
+        <div class="card-actions">
+          <button class="read-btn" type="button" data-read="${story.id}">Masalı Oku</button>
+          <button class="favorite-btn" type="button" data-favorite="${story.id}" aria-pressed="${favorites.includes(story.id)}" aria-label="${story.title} favorilere ekle">${favorites.includes(story.id) ? "♥" : "♡"}</button>
+        </div>
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+
+function openStory(id) {
+  const story = stories.find(item => item.id === id);
+  if (!story) return;
+  readerTitle.textContent = story.title;
+  readerCategory.textContent = story.category;
+  readerContent.innerHTML = "";
+  story.text.forEach(paragraph => {
+    const p = document.createElement("p");
+    p.textContent = paragraph;
+    readerContent.appendChild(p);
+  });
+  const note = document.createElement("p");
+  note.className = "source-note";
+  note.textContent = "Kaynak notu: " + story.source;
+  readerContent.appendChild(note);
+  reader.classList.add("open");
+  reader.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+grid.addEventListener("click", event => {
+  const readButton = event.target.closest("[data-read]");
+  const favoriteButton = event.target.closest("[data-favorite]");
+  if (readButton) openStory(Number(readButton.dataset.read));
+  if (favoriteButton) {
+    const id = Number(favoriteButton.dataset.favorite);
+    favorites = favorites.includes(id) ? favorites.filter(item => item !== id) : [...favorites, id];
+    try {
+      localStorage.setItem("masalFavorileri", JSON.stringify(favorites));
+    } catch (error) {}
+    renderStories();
+  }
+});
+
+[searchInput, categorySelect, viewSelect].forEach(control => control.addEventListener("input", renderStories));
+document.getElementById("closeReader").addEventListener("click", () => {
+  reader.classList.remove("open");
+  document.getElementById("masallar").scrollIntoView({ behavior: "smooth" });
+});
+
+function updateReaderFont() {
+  readerContent.querySelectorAll("p:not(.source-note)").forEach(p => p.style.fontSize = fontSize + "rem");
+}
+document.getElementById("smallerText").addEventListener("click", () => {
+  fontSize = Math.max(.9, fontSize - .1);
+  updateReaderFont();
+});
+document.getElementById("largerText").addEventListener("click", () => {
+  fontSize = Math.min(1.6, fontSize + .1);
+  updateReaderFont();
+});
+document.getElementById("resetText").addEventListener("click", () => {
+  fontSize = 1.08;
+  updateReaderFont();
+});
+renderStories();
+</script>
+</body>
+</html>
